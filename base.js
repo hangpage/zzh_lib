@@ -3,7 +3,7 @@
 		version: 1.0,
 		_index: 0,
 		HTML5: window['applicationCache'],
-		//ÑéÖ¤¿Í»§¶Ë·½·¨
+		//éªŒè¯å®¢æˆ·ç«¯æ–¹æ³•
 		Android: function() {
 			return navigator.userAgent.match(/Android/i) ? true: false;
 		},
@@ -32,39 +32,49 @@
 				}
 			}
 		},
-		//TODO ·â×°extend¼Ì³Ğ·½·¨
+		oepnUrl: function(url){
+			var a = document.createElement('a');
+			a.target = '_blank';
+			a.href = url;
+			a.style.display = 'none';
+			var body = document.getElementsByTagName('body').item(0);
+			body.appendChild(a);
+			a.click();
+			body.removeChild(a);
+		},
+		//TODO å°è£…extendç»§æ‰¿æ–¹æ³•
 		/**
-		 * @step1 ´´½¨¼Ì³ĞÀàµÄ¹¹Ôìº¯Êı
-		 * @step2 ÉèÖÃ¼Ì³ĞÀàµÄÔ­ĞÍÁ´Îª¸¸Àà¹¹Ôìº¯Êı
-		 * @step3 µ÷Õû¼Ì³ĞÀàµÄ¹¹Ôìº¯Êı
-		 * @step4 ´´½¨¼Ì³ĞÀà
+		 * @step1 åˆ›å»ºç»§æ‰¿ç±»çš„æ„é€ å‡½æ•°
+		 * @step2 è®¾ç½®ç»§æ‰¿ç±»çš„åŸå‹é“¾ä¸ºçˆ¶ç±»æ„é€ å‡½æ•°
+		 * @step3 è°ƒæ•´ç»§æ‰¿ç±»çš„æ„é€ å‡½æ•°
+		 * @step4 åˆ›å»ºç»§æ‰¿ç±»
 		 
-		 * ¼Ì³Ğ£¬²¢ÓÉ´«µİµÄÖµ¾ö¶¨ÊÇ·ñ¸²¸ÇÔ­¶ÔÏóµÄÊôĞÔ
-		 * ·µ»ØµÄ¶ÔÏóÖĞÒ²Ôö¼ÓÁË override() º¯Êı£¬ÓÃÓÚ¸²¸ÇÊµÀıµÄ³ÉÔ±  
-		 * @param { Object } subclass ×ÓÀà£¬ÓÃÓÚ¼Ì³Ğ£¨¸ÃÀà¼Ì³ĞÁË¸¸ÀàËùÓĞÊôĞÔ£¬²¢×îÖÕ·µ»Ø¸Ã¶ÔÏó£©  
-		 * @param { Object } superclass ¸¸Àà£¬±»¼Ì³Ğ  
-		 * @param { Object } overrides £¨¸Ã²ÎÊı¿ÉÑ¡£© Ò»¸ö¶ÔÏó£¬½«Ëü±¾ÉíĞ¯´øµÄÊôĞÔ¶Ô×ÓÀà½øĞĞ¸²¸Ç
+		 * ç»§æ‰¿ï¼Œå¹¶ç”±ä¼ é€’çš„å€¼å†³å®šæ˜¯å¦è¦†ç›–åŸå¯¹è±¡çš„å±æ€§
+		 * è¿”å›çš„å¯¹è±¡ä¸­ä¹Ÿå¢åŠ äº† override() å‡½æ•°ï¼Œç”¨äºè¦†ç›–å®ä¾‹çš„æˆå‘˜  
+		 * @param { Object } subclass å­ç±»ï¼Œç”¨äºç»§æ‰¿ï¼ˆè¯¥ç±»ç»§æ‰¿äº†çˆ¶ç±»æ‰€æœ‰å±æ€§ï¼Œå¹¶æœ€ç»ˆè¿”å›è¯¥å¯¹è±¡ï¼‰  
+		 * @param { Object } superclass çˆ¶ç±»ï¼Œè¢«ç»§æ‰¿  
+		 * @param { Object } overrides ï¼ˆè¯¥å‚æ•°å¯é€‰ï¼‰ ä¸€ä¸ªå¯¹è±¡ï¼Œå°†å®ƒæœ¬èº«æºå¸¦çš„å±æ€§å¯¹å­ç±»è¿›è¡Œè¦†ç›–
 		 * @method extend 
 		 */
 		extend: function(subFun, superFun, overrides) {
 			var superClass = function() {};
 			superClass.prototype = superFun.prototype;
-			//³¬Àà(¼´ÖĞ¼ä±äÁ¿)ÖĞÊµÏÖÁË¶Ô¸¸ÀàµÄ¼Ì³Ğ
+			//è¶…ç±»(å³ä¸­é—´å˜é‡)ä¸­å®ç°äº†å¯¹çˆ¶ç±»çš„ç»§æ‰¿
 			superClass.constructor = superFun.constructor;
-			//ÏÂÃæÁ½¾äÊÇJSÖĞ¼òµ¥¼Ì³Ğ·½·¨
+			//ä¸‹é¢ä¸¤å¥æ˜¯JSä¸­ç®€å•ç»§æ‰¿æ–¹æ³•
 			superClass.prototype.constructor = superFun;
 			subFun.prototype = new superClass();
 
 			subFun.prototype.constructor = subFun;
-			//¸Ä±äsuperClassÊµÀı¶ÔÏóµÄconstructorÊ¹ÆäÖ¸Ïò×ÔÉí,ÒòÎªÕâÀïsubFunÔ­ĞÍµÄconstructor»¹ÊÇsuperClassµÄconstructor
+			//æ”¹å˜superClasså®ä¾‹å¯¹è±¡çš„constructorä½¿å…¶æŒ‡å‘è‡ªèº«,å› ä¸ºè¿™é‡ŒsubFunåŸå‹çš„constructorè¿˜æ˜¯superClassçš„constructor
 			if (overrides) {
 				for (var key in overrides) {
 					subFun.prototype[key] = overrides[key];
 				}
 			}
 			subFun.superClass = superFun.prototype;
-			//×ÓÀàsuperClassÊôĞÔ±£´æ¸¸ÀàÔ­ĞÍ
-			// Èç¹û¸¸Ààsuperclass.prototype.constructorÃ»ÓĞ±»×Ô¶¨Òå£¬Ôò×Ô¶¨Òå
+			//å­ç±»superClasså±æ€§ä¿å­˜çˆ¶ç±»åŸå‹
+			// å¦‚æœçˆ¶ç±»superclass.prototype.constructoræ²¡æœ‰è¢«è‡ªå®šä¹‰ï¼Œåˆ™è‡ªå®šä¹‰
 			if (superFun.prototype.constructor == Object.prototype.constructor) {
 				superFun.prototype.constructor = superFun;
 			}
@@ -82,7 +92,7 @@
 			return !isNaN(value) && typeof value == 'number';
 		},
 		/*
-			*¶ÔÈÕÆÚ¸ñÊ½»¯µÄ·½·¨À©Õ¹
+			*å¯¹æ—¥æœŸæ ¼å¼åŒ–çš„æ–¹æ³•æ‰©å±•
 			*zzh.formatDate('yyyy-mm-dd hh:mi:ss',new Date) => 2017-03-24 15:41:40
 		*/
 		formatDate: function(format, time, returnDate) {
@@ -95,11 +105,11 @@
 				}
 			}
 			if (jQuery.type(time) == 'string') {
-				time = time.replace(/T/i, " "); // Õë¶ÔdateÀàĞÍ²éÑ¯Ê±¼ä´øT
-				time = time.replace(/\.\d+/i, ""); // Õë¶ÔIE ¶ÔÓ¦Êı¾İ¿âdatetime
+				time = time.replace(/T/i, " "); // é’ˆå¯¹dateç±»å‹æŸ¥è¯¢æ—¶é—´å¸¦T
+				time = time.replace(/\.\d+/i, ""); // é’ˆå¯¹IE å¯¹åº”æ•°æ®åº“datetime
 				time = time.replace(/-/g, "/");
-				time = time.replace(/T/i, " "); // Õë¶ÔdateÀàĞÍ²éÑ¯Ê±¼ä´øT
-				time = time.replace(/\.\d+/i, ""); // Õë¶ÔIE ¶ÔÓ¦Êı¾İ¿âdatetime
+				time = time.replace(/T/i, " "); // é’ˆå¯¹dateç±»å‹æŸ¥è¯¢æ—¶é—´å¸¦T
+				time = time.replace(/\.\d+/i, ""); // é’ˆå¯¹IE å¯¹åº”æ•°æ®åº“datetime
 				time = time.replace(/-/g, "/");
 				var _T = time.split(" ");
 				var _d = _T[0],
@@ -128,7 +138,7 @@
 					return time;
 				}
 			}
-			var Week = ['ÈÕ', 'Ò»', '¶ş', 'Èı', 'ËÄ', 'Îå', 'Áù'];
+			var Week = ['æ—¥', 'ä¸€', 'äºŒ', 'ä¸‰', 'å››', 'äº”', 'å…­'];
 			format = format.replace(/YYYY/i, time.getFullYear());
 			format = format.replace(/YY/i, (time.getYear() % 100) > 9 ? (time.getYear() % 100).toString() : '0' + (time.getYear() % 100));
 			format = format.replace(/MM/i, (time.getMonth() + 1) > 9 ? (time.getMonth() + 1).toString() : '0' + (time.getMonth() + 1));
@@ -143,7 +153,7 @@
 			return format;
 		}
 	}
-	//TODO ÓÃ»§ĞĞÎª·½·¨
+	//TODO ç”¨æˆ·è¡Œä¸ºæ–¹æ³•
 	zzh.UserUtils = {
 		copy: function(id){
 			if(id.indexOf('#') == -1){
@@ -152,15 +162,15 @@
 			var area = $(id);
 			area.select();
 			document.execCommand("Copy");
-			alert('¸´ÖÆ³É¹¦£¬¿ÉÖ±½ÓÕ³Ìù');
+			alert('å¤åˆ¶æˆåŠŸï¼Œå¯ç›´æ¥ç²˜è´´');
 		},
 		/*
 			@param {String}
-			@oncopy 	   ¸´ÖÆĞĞÎª
-			@onpaste 	   Õ³ÌùĞĞÎª
-			@oncut         ¼ôÇĞĞĞÎª
-			@oncontextmenu ÓÒ»÷²Ëµ¥ĞĞÎª
-			@onselectstart Ñ¡ÖĞĞĞÎª
+			@oncopy 	   å¤åˆ¶è¡Œä¸º
+			@onpaste 	   ç²˜è´´è¡Œä¸º
+			@oncut         å‰ªåˆ‡è¡Œä¸º
+			@oncontextmenu å³å‡»èœå•è¡Œä¸º
+			@onselectstart é€‰ä¸­è¡Œä¸º
 		*/
 		preventUserBehavior: function(eventName){
 			document[eventName] = function (event){
@@ -180,21 +190,10 @@
 
 	}
 
-	zzh.OpenUrl(url) = function {
-		var a = document.createElement('a');
-		a.target = '_blank';
-		a.href = url;
-		a.style.display = 'none';
-		var body = document.getElementsByTagName('body').item(0);
-		body.appendChild(a);
-		a.click();
-		body.removeChild(a);
-	}
-	
 	zzh.Img = function(){
 		this.el = $('body');
 		this.imgs = [];
-//		this._init(); //Ä¬ÈÏ²»µ÷ÓÃinit·½·¨  µã»÷²é¿´Í¼Æ¬Ê±ºò´¥·¢
+//		this._init(); //é»˜è®¤ä¸è°ƒç”¨initæ–¹æ³•  ç‚¹å‡»æŸ¥çœ‹å›¾ç‰‡æ—¶å€™è§¦å‘
 	}
 	zzh.Img.prototype = {
 		_init: function(){
@@ -209,7 +208,7 @@
 			this.loader = jQuery('<div class="img-loader"></div>').appendTo(this.imgBox);
 			this.showImg = jQuery('<img src="" alt="">');
 			this.showImg.appendTo(this.imgBox);
-			//<div class="icon icon-zoom-in"></div><div class="icon icon-zoom-out"></div> ÕâÊÇ·Å´óËõĞ¡
+			//<div class="icon icon-zoom-in"></div><div class="icon icon-zoom-out"></div> è¿™æ˜¯æ”¾å¤§ç¼©å°
 			this._renderImgNav();
 			this.toolBox = jQuery('<div class="tool-box"><div class="icon icon-repeat"></div><div class="icon icon-zoom-in"></div><div class="icon icon-zoom-out"></div></div>');
 			this.toolBox.appendTo(this.borderEl);
