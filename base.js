@@ -58,22 +58,22 @@
 		 */
 		extend: function(subFun, superFun, overrides) {
 			var superClass = function() {};
+			//利用超类(即中间变量)实现对父类的继承
 			superClass.prototype = superFun.prototype;
-			//超类(即中间变量)中实现了对父类的继承
 			superClass.constructor = superFun.constructor;
-			//下面两句是JS中简单继承方法
 			superClass.prototype.constructor = superFun;
-			subFun.prototype = new superClass();
 
+			//下面两句是JS中简单继承方法
+			subFun.prototype = new superClass();//此处subFunn.prototype对象已经被完全重写，接下来需要将其constructor指针指向subFun,构造函数.prototype.constructor必须指向构造函数自身
 			subFun.prototype.constructor = subFun;
-			//改变superClass实例对象的constructor使其指向自身,因为这里subFun原型的constructor还是superClass的constructor
+			//重写某些方法
 			if (overrides) {
 				for (var key in overrides) {
 					subFun.prototype[key] = overrides[key];
 				}
 			}
-			subFun.superClass = superFun.prototype;
 			//子类superClass属性保存父类原型
+			subFun.superClass = superFun.prototype;
 			// 如果父类superclass.prototype.constructor没有被自定义，则自定义
 			if (superFun.prototype.constructor == Object.prototype.constructor) {
 				superFun.prototype.constructor = superFun;
